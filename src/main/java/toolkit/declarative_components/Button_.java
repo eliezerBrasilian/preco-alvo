@@ -9,10 +9,16 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class Button_ extends Button {
     public Button_(String value) {
@@ -94,22 +100,67 @@ public class Button_ extends Button {
         }
 
         public static class InnerStyles {
-            private final InnerModifier mod;
+            private final InnerModifier modifier;
+            private CornerRadii cornerRadii = CornerRadii.EMPTY;
+            private Paint borderColor = null;
 
             public InnerStyles(InnerModifier modifier) {
-                this.mod = modifier;
+                this.modifier = modifier;
             }
 
             public InnerStyles bgColor(Color color) {
-                mod.node.setBackground(new Background(
-                        new BackgroundFill(color, null, null)));
+                modifier.node.setBackground(new Background(
+                        new BackgroundFill(color, cornerRadii, null)));
                 return this;
             }
 
             public InnerStyles textColor(Color color) {
-                mod.node.setTextFill(color);
+                modifier.node.setTextFill(color);
                 return this;
             }
+
+            public InnerStyles borderRadius(int radiusAll) {
+                this.cornerRadii = new CornerRadii(radiusAll);
+
+                // Reaplica o background com cantos arredondados
+                BackgroundFill currentFill = modifier.node.getBackground() != null
+                        ? modifier.node.getBackground().getFills().get(0)
+                        : new BackgroundFill(Color.TRANSPARENT, cornerRadii, null);
+
+                modifier.node.setBackground(new Background(
+                        new BackgroundFill(
+                                currentFill.getFill(),
+                                cornerRadii,
+                                null)));
+
+                // Atualiza a borda usando a cor definida, se existir
+                if (borderColor != null) {
+                    modifier.node.setBorder(new Border(
+                            new BorderStroke(
+                                    borderColor,
+                                    BorderStrokeStyle.SOLID,
+                                    cornerRadii,
+                                    new BorderWidths(1))));
+                } else {
+                    modifier.node.setBorder(Border.EMPTY);
+                }
+
+                return this;
+            }
+
+            public InnerStyles borderColor(Paint color) {
+                this.borderColor = color;
+
+                // Aplica a borda imediatamente caso já tenha um radius definido
+                modifier.node.setBorder(new Border(
+                        new BorderStroke(
+                                borderColor,
+                                BorderStrokeStyle.SOLID,
+                                cornerRadii,
+                                new BorderWidths(1))));
+                return this;
+            }
+
         }
 
     }

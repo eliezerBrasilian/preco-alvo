@@ -12,7 +12,9 @@ import javafx.stage.Stage;
 import toolkit.declarative_components.Button_;
 import toolkit.declarative_components.Column;
 import toolkit.declarative_components.Hr_;
+import toolkit.declarative_components.Li;
 import toolkit.declarative_components.Row_;
+import toolkit.declarative_components.Spacer;
 import toolkit.declarative_components.Text_;
 import my_app.marketplaces.Marketplace;
 import my_app.marketplaces.Revendedor;
@@ -110,6 +112,7 @@ public class HomeScreen extends Column {
                         m.marginTop(20);
                     });
 
+            new Spacer(m -> m.height(10));
             // mesmo que (a,b,c) -> (a,b,c)
             new MainSection(this::handleFazerSimulacao);
 
@@ -117,25 +120,30 @@ public class HomeScreen extends Column {
                 modifier.marginTop(20);
             });
 
+            new Spacer(m -> m.height(10));
             new Row_((mo) -> {
-                mo.fillMaxWidth(true).spaceBetween().marginTop(30);
+                mo.fillMaxWidth(true).spaceBetween();
 
                 new Column((md) -> {
-                    new Text_("Resultado da simulação");
+                    new Text_("Resultado da simulação", m -> m.fontSize(20));
+                    new Spacer(m -> m.height(10));
                     new Text_("Ao vender na Shopee:");
 
-                    new Text_(precoMinimoDeVendaShopeeBinding.get()).textProperty()
+                    new Li(precoMinimoDeVendaShopeeBinding.get()).contentProperty()
                             .bind(precoMinimoDeVendaShopeeBinding);
 
-                    new Text_(lucroBrutoShopeeBinding.get()).textProperty().bind(lucroBrutoShopeeBinding);
+                    new Li(lucroBrutoShopeeBinding.get()).contentProperty().bind(lucroBrutoShopeeBinding);
 
-                    new Text_(lucroLiquidoShopeeBinding.get()).textProperty().bind(lucroLiquidoShopeeBinding);
+                    new Li(lucroLiquidoShopeeBinding.get()).contentProperty().bind(lucroLiquidoShopeeBinding);
 
-                    new Text_(valorParaReinvestirShopeeBinding.get()).textProperty()
+                    new Li(valorParaReinvestirShopeeBinding.get()).contentProperty()
                             .bind(valorParaReinvestirShopeeBinding);
                 });
 
-                new Button_("Salvar Simulação");
+                new Button_("Salvar Simulação", m -> m.styles()
+                        .bgColor(Color.web("#374060"))
+                        .textColor(Color.WHITE)
+                        .borderRadius(10));
 
                 // new Button_("Exportar Simulação");
 

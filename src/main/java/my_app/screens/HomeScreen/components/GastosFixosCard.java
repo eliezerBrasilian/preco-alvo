@@ -20,10 +20,11 @@ public class GastosFixosCard extends Column {
 
     public GastosFixosCard(ObservableList<Gasto> gastos) {
         render((col, mod) -> {
-            mod.padding(20).width(230).fillMaxHeigth(false);
-            mod.styles().bgColor(Color.WHITE);
+            mod.padding(15).width(230);
+            mod.styles().bgColor(Color.WHITE).borderRadius(10);
 
             new Text_("Meus gastos fixos");
+            new Spacer(m -> m.height(10));
 
             col.each(
                     gastos,
@@ -53,7 +54,8 @@ public class GastosFixosCard extends Column {
                 btn_md.onClick(() -> expanded.set(!expanded.get()))
                         .fillMaxWidth(true)
                         .styles().bgColor(Color.web("#1E331F"))
-                        .textColor(Color.WHITE);
+                        .textColor(Color.WHITE)
+                        .borderRadius(10);
             });
             // col.when(condition).else(()->{})
             col.when(expanded, () -> new Column(column -> {

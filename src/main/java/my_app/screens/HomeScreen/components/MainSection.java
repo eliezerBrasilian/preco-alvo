@@ -20,12 +20,13 @@ import toolkit.declarative_components.Button_;
 import toolkit.declarative_components.Column;
 import toolkit.declarative_components.Row_;
 import toolkit.declarative_components.Select_;
+import toolkit.declarative_components.Spacer;
 import toolkit.declarative_components.TextField_;
 import toolkit.declarative_components.Text_;
 
 public class MainSection extends Row_ {
 
-    SimpleStringProperty nomeProperty = new SimpleStringProperty("Relógio");
+    SimpleStringProperty nomeProperty = new SimpleStringProperty("");
 
     SimpleStringProperty quantidadeProperty = new SimpleStringProperty("");
 
@@ -41,12 +42,12 @@ public class MainSection extends Row_ {
 
             modifier.spacing(20);
 
-            Left(nomeProperty, quantidadeProperty, valorProperty);
+            Left();
 
             new GastosFixosCard(gastosFixosCard);
 
             new Column((col_, md) -> {
-                md.padding(10).height(200);
+                md.height(200);
 
                 new Text_("Opções de Venda");
                 new Select_<>(List.of("Estipular preço de venda", "Estipular margem de lucro"));
@@ -74,7 +75,8 @@ public class MainSection extends Row_ {
                                 callback.executar(precoVenda, gastos, pedido);
                             })
                             .styles()
-                            .textColor(Color.WHITE).bgColor(Color.web("#5B44BF"));
+                            .textColor(Color.WHITE).bgColor(Color.web("#5B44BF"))
+                            .borderRadius(10);
                 });
             });
 
@@ -82,8 +84,7 @@ public class MainSection extends Row_ {
     }
 
     @Component
-    Column Left(SimpleStringProperty nome,
-            SimpleStringProperty quantidade, SimpleStringProperty valor) {
+    Column Left() {
 
         SimpleBooleanProperty preencheuCampos = new SimpleBooleanProperty(false);
         SimpleObjectProperty<BigDecimal> valorItemProperty = new SimpleObjectProperty<>(BigDecimal.ZERO);
@@ -91,12 +92,12 @@ public class MainSection extends Row_ {
         // Sempre atualiza o valorItem quando os campos mudam
         Runnable atualizarValorItem = () -> {
             try {
-                if (valor.get().isBlank() || quantidade.get().isBlank()) {
+                if (valorProperty.get().isBlank() || quantidadeProperty.get().isBlank()) {
                     valorItemProperty.set(BigDecimal.ZERO);
                     return;
                 }
-                BigDecimal valorFormatado = new BigDecimal(valor.get().trim().replace(",", "."));
-                BigDecimal quantidadeFormatada = new BigDecimal(quantidade.get().trim());
+                BigDecimal valorFormatado = new BigDecimal(valorProperty.get().trim().replace(",", "."));
+                BigDecimal quantidadeFormatada = new BigDecimal(quantidadeProperty.get().trim());
 
                 if (quantidadeFormatada.compareTo(BigDecimal.ZERO) == 0) {
                     valorItemProperty.set(BigDecimal.ZERO);
@@ -109,8 +110,8 @@ public class MainSection extends Row_ {
             }
         };
 
-        quantidade.addListener((obs, oldVal, newVal) -> atualizarValorItem.run());
-        valor.addListener((obs, oldVal, newVal) -> atualizarValorItem.run());
+        quantidadeProperty.addListener((obs, oldVal, newVal) -> atualizarValorItem.run());
+        valorProperty.addListener((obs, oldVal, newVal) -> atualizarValorItem.run());
 
         ObjectBinding<String> objectBinding = Bindings.createObjectBinding(() -> {
             atualizarValorItem.run();
@@ -118,22 +119,23 @@ public class MainSection extends Row_ {
                 return "Preencha quantidade e valor";
             }
             return "Cada item saiu por: " + valorItemProperty.get();
-        }, quantidade, valor);
+        }, quantidadeProperty, valorProperty);
 
-        return new Column((self, modifier) -> {
+        return new Column((modifier) -> {
 
-            new Column((col, md) -> {
-                md.styles().bgColor(Color.WHITE).border(10);
+            new Column((md) -> {
+                md.styles().bgColor(Color.WHITE).borderRadius(10);
 
                 md.padding(10).height(170);
                 new Text_("Produtos para revenda");
-                new TextField_("Nome", nome);
-                new TextField_("Quantidade", quantidade);
-                new TextField_("R$", valor);
+                new Spacer(m -> m.height(10));
+                new TextField_("Nome", nomeProperty);
+                new TextField_("Quantidade", quantidadeProperty);
+                new TextField_("R$", valorProperty);
             });
 
             new Text_("Detalhes");
-            new Text_(objectBinding.getValue()).textProperty().bind(objectBinding);
+            new Text_(objectBinding.get()).textProperty().bind(objectBinding);
 
         });
     }
