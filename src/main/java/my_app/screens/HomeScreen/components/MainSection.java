@@ -68,7 +68,7 @@ public class MainSection extends Row_ {
                                 Revendedor.Pedido pedido = new Revendedor.Pedido(
                                         nomeProperty.get(),
                                         Integer.valueOf(quantidadeProperty.get()),
-                                        new BigDecimal(valorProperty.get()),
+                                        new BigDecimal(valorProperty.get().replace(",", ".")),
                                         Revendedor.Pedido.Categoria.RELOGIOS);// TODO mudar aqui depois para ser
                                                                               // dinamico, pegar categoria de um select
 

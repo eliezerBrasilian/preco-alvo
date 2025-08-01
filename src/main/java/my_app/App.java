@@ -28,17 +28,19 @@ public class App extends Application {
     }
 
     void setup(Scene scene) {
+        new ResourcesDirectory();
         // icon on window
         primaryStage.getIcons().add(new Image(
-                new ResourcesDirectory().get("/assets/app_ico_window_32_32.png")));
+                ResourcesDirectory.get("/assets/app_ico_window_32_32.png")));
 
+        new ResourcesDirectory();
         // registering font
         Font.loadFont(
-                new ResourcesDirectory().get("/assets/fonts/Montserrat-Regular.ttf"), 14);
+                ResourcesDirectory.get("/assets/fonts/Montserrat-Regular.ttf"), 14);
 
         // styles
         scene.getStylesheets().add(
-                getClass().getResource("./styles.css")
+                getClass().getResource("/css/global_styles.css")
                         .toExternalForm());
 
         this.primaryStage.setTitle("My Coesion-App");

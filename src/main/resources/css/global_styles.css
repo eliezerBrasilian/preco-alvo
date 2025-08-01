@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url("/assets/fonts/Montserrat-Regular.ttf");
+}
+
+* {
+  -fx-font-size: 16px;
+  -fx-font-family: "Montserrat";
+}
+
+.button:hover {
+  -fx-opacity: 0.9;
+}
+
+.button {
+  -fx-text-size: 10px; /* Menor que o padrão */
+}
