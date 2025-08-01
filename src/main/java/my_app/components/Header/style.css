@@ -1,0 +1,11 @@
+.container {
+  -fx-spacing: 20px;
+}
+
+.titulo {
+  -fx-font-weight: bold;
+}
+
+.nome-usuario {
+  -fx-font-size: 14px;
+}
