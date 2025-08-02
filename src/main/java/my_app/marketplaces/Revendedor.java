@@ -12,7 +12,7 @@ public class Revendedor {
     private final Marketplace marketplace;
     public Pedido pedido;
     private List<Gasto> gastosFixos;
-    public float percentualReinvestimento = 70;
+    public float percentualReinvestimento = 60f;
 
     public Revendedor(Marketplace marketplace) {
         this.marketplace = marketplace;
@@ -129,72 +129,4 @@ public class Revendedor {
         }
     }
 
-}
-
-class InnerRevendedor {
-
-    public static void main(String[] args) {
-
-    }
-
-    public static void testShopee() {
-        Marketplace shopee = new Shopee();
-
-        Revendedor rev = new Revendedor(shopee);
-        Revendedor.Pedido pedido = new Revendedor.Pedido("Relogios",
-                10,
-                new BigDecimal(132.96),
-                Revendedor.Pedido.Categoria.RELOGIOS);
-
-        Revendedor.Gasto[] gastos = {
-                new Revendedor.Gasto("Embalagem", BigDecimal.ONE)
-        };
-
-        //
-        final var precoVendaEscolhido = new BigDecimal(97.99);
-        final var margemLucro = 70f;
-
-        rev.pedido = pedido;
-        rev.vincularGastosFixos(gastos);
-
-        BigDecimal lucroBrutoFromPrecoDeVenda = rev.obterLucroBrutoFromPrecoDeVenda(precoVendaEscolhido);
-
-        BigDecimal lucroLiquidoFromPrecoDeVenda = rev.obterLucroLiquido(lucroBrutoFromPrecoDeVenda);
-
-        BigDecimal valorParaReinvestimentoFromPrecoDeVenda = rev
-                .obterValorParaReinvestimento(lucroBrutoFromPrecoDeVenda);
-
-        // ------------------------
-
-        BigDecimal lucroBrutoFromMargem = rev.obterLucroBrutoFromMargem(margemLucro);
-
-        BigDecimal precoVendaFromMargem = rev.obterPrecoDeVendaFromMargem(70);
-
-        final var custoTotal = rev.obterPrecoMinimoDeVenda();
-
-        BigDecimal valorParaReinvestimentoFromMargem = rev.obterValorParaReinvestimento(lucroBrutoFromMargem);
-
-        BigDecimal lucroLiquidoFromMargem = rev.obterLucroLiquido(lucroBrutoFromMargem);
-
-        System.out.println("Você deve vender o produto acima de %.2f".formatted(custoTotal));
-
-        System.out.println("-------------------");
-        System.out.println("--------SHOPEE----------");
-        System.out
-                .println(
-                        "(PRECO DE VENDA) Vendendo o produto a %.2f\n\tLucro bruto: %.2f\n\tTotal para reinvestir: R$ %.2f\n\tLucro liquido é de: %.2f"
-                                .formatted(precoVendaEscolhido,
-                                        lucroBrutoFromPrecoDeVenda,
-                                        valorParaReinvestimentoFromPrecoDeVenda,
-                                        lucroLiquidoFromPrecoDeVenda));
-
-        System.out.println(
-                "(MARGEM) Preço de venda gerado: %.2f\n\tMargem de: %.2f\n\tLucro bruto: %.2f\n\tTotal para reinvestir: R$ %.2f\n\tLucro liquido é de: %.2f"
-                        .formatted(
-                                precoVendaFromMargem,
-                                margemLucro,
-                                lucroBrutoFromMargem,
-                                valorParaReinvestimentoFromMargem,
-                                lucroLiquidoFromMargem));
-    }
 }
