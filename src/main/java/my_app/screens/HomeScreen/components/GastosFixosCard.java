@@ -28,13 +28,13 @@ public class GastosFixosCard extends Column {
 
             col.each(
                     gastos,
-                    gasto -> new Row_((c, m) -> {
+                    gasto -> new Row_((m) -> {
                         m.fillMaxWidth(true)
                                 .spaceBetween();
 
                         new Text_(gasto.title());
 
-                        new Row_((c_, m_) -> {
+                        new Row_(() -> {
 
                             new Button_(FontIcon.of(
                                     AntDesignIconsOutlined.EDIT,

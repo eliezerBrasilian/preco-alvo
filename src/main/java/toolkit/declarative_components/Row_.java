@@ -1,6 +1,5 @@
 package toolkit.declarative_components;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javafx.beans.value.ObservableValue;
@@ -21,17 +20,21 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class Row_ extends HBox implements DeclarativeContracts<Row_> {
-
-    private double spacing = 10;
-    private Insets padding = Insets.EMPTY;
-    private Pos alignment = Pos.TOP_LEFT;
+public class Row_ extends HBox implements DeclarativeContracts<Row_.InnerModifier> {
 
     public Row_() {
         super();
         // Não expandir por padrão
         HBox.setHgrow(this, Priority.NEVER);
         setMaxWidth(Region.USE_PREF_SIZE);
+    }
+
+    public Row_(Runnable content) {
+        this();
+        FXNodeContext.add(this);
+        FXNodeContext.push(this);
+        content.run();
+        FXNodeContext.pop();
     }
 
     public Row_(Consumer<InnerModifier> withModifier) {
@@ -42,26 +45,19 @@ public class Row_ extends HBox implements DeclarativeContracts<Row_> {
         FXNodeContext.pop();
     }
 
-    public Row_(BiConsumer<Row_, InnerModifier> withModifier) {
-        this();
+    @Override
+    public void render(Runnable content) {
         FXNodeContext.add(this);
         FXNodeContext.push(this);
-        withModifier.accept(this, new InnerModifier(this));
+        content.run();
         FXNodeContext.pop();
     }
 
     @Override
-    public void render(Consumer<Row_> withModifier) {
+    public void render(Consumer<InnerModifier> withModifier) {
         FXNodeContext.add(this);
         FXNodeContext.push(this);
-        withModifier.accept(this);
-        FXNodeContext.pop();
-    }
-
-    public void render(BiConsumer<Row_, InnerModifier> withModifier) {
-        FXNodeContext.add(this);
-        FXNodeContext.push(this);
-        withModifier.accept(this, new InnerModifier(this));
+        withModifier.accept(new InnerModifier(this));
         FXNodeContext.pop();
     }
 
@@ -75,18 +71,15 @@ public class Row_ extends HBox implements DeclarativeContracts<Row_> {
     }
 
     public void setSpacing_(double spacing) {
-        this.spacing = spacing;
         super.setSpacing(spacing);
         requestLayout();
     }
 
     public void setPadding_(Insets padding) {
-        this.padding = padding;
         requestLayout();
     }
 
     public void setAlignment_(Pos alignment) {
-        this.alignment = alignment;
         requestLayout();
     }
 

@@ -31,7 +31,7 @@ public class LoginScreen extends Column {
             setupStage(stage);
         });
 
-        render((col, modifier) -> {
+        render((modifier) -> {
 
             var maxWidth = 280;
 
@@ -60,7 +60,7 @@ public class LoginScreen extends Column {
                         .maxWidth(maxWidth);
             });
 
-            new Column((col_) -> {
+            new Column(() -> {
                 new Label_("Sua chave de acesso",
                         m -> m.fontSize(15)
                                 .styles().color(Color.BLACK));

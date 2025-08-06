@@ -38,7 +38,7 @@ public class MainSection extends Row_ {
 
     public MainSection(SimulacaoCallback callback) {
 
-        render((self, modifier) -> {
+        render((modifier) -> {
 
             modifier.spacing(20);
 
@@ -46,7 +46,7 @@ public class MainSection extends Row_ {
 
             new GastosFixosCard(gastosFixosCard);
 
-            new Column((col_, md) -> {
+            new Column((md) -> {
                 md.height(200);
 
                 new Text_("Opções de Venda");
@@ -121,7 +121,7 @@ public class MainSection extends Row_ {
             return "Cada item saiu por: " + valorItemProperty.get();
         }, quantidadeProperty, valorProperty);
 
-        return new Column((modifier) -> {
+        return new Column(() -> {
 
             new Column((md) -> {
                 md.styles().bgColor(Color.WHITE).borderRadius(10);

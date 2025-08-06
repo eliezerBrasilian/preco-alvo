@@ -24,15 +24,24 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-public class Column extends VBox implements DeclarativeContracts<Column> {
-
-    private double spacing = 10;
-    private Insets padding = Insets.EMPTY;
-    private Pos alignment = Pos.TOP_LEFT;
+public class Column extends VBox implements DeclarativeContracts<Column.InnerModifier> {
 
     public Column() {
         super();
 
+        setMinHeight(Region.USE_PREF_SIZE);
+        setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // 🔑 Importante: impedir crescimento automático
+        setMaxHeight(Region.USE_PREF_SIZE);
+        VBox.setVgrow(this, Priority.NEVER);
+    }
+
+    public Column(Runnable content) {
+        FXNodeContext.add(this); // <---- Adiciona esta Column ao contexto pai
+        FXNodeContext.push(this); // Agora, ela é o contexto para seus próprios filhos
+        content.run();
+        FXNodeContext.pop();
         setMinHeight(Region.USE_PREF_SIZE);
         setPrefHeight(Region.USE_COMPUTED_SIZE);
 
@@ -78,10 +87,24 @@ public class Column extends VBox implements DeclarativeContracts<Column> {
     }
 
     @Override
-    public void render(Consumer<Column> withModifier) {
+    public void render(Runnable content) {
         FXNodeContext.add(this); // <---- Adiciona esta Column ao contexto pai
         FXNodeContext.push(this); // Agora, ela é o contexto para seus próprios filhos
-        withModifier.accept(this);
+        content.run();
+        FXNodeContext.pop();
+        setMinHeight(Region.USE_PREF_SIZE);
+        setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // 🔑 Importante: impedir crescimento automático
+        setMaxHeight(Region.USE_PREF_SIZE);
+        VBox.setVgrow(this, Priority.NEVER);
+    }
+
+    @Override
+    public void render(Consumer<InnerModifier> withModifier) {
+        FXNodeContext.add(this); // <---- Adiciona esta Column ao contexto pai
+        FXNodeContext.push(this); // Agora, ela é o contexto para seus próprios filhos
+        withModifier.accept(new InnerModifier(this));
         FXNodeContext.pop();
         setMinHeight(Region.USE_PREF_SIZE);
         setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -157,19 +180,16 @@ public class Column extends VBox implements DeclarativeContracts<Column> {
     }
 
     public void setSpacing_(double spacing) {
-        this.spacing = spacing;
         super.setSpacing(spacing);
         requestLayout();
     }
 
     public void setPadding_(Insets padding) {
-        this.padding = padding;
         super.setPadding(padding);
         requestLayout();
     }
 
     public void setAlignment_(Pos alignment) {
-        this.alignment = alignment;
         super.setAlignment(alignment);
         requestLayout();
     }

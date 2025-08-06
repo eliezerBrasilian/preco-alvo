@@ -101,7 +101,7 @@ public class HomeScreen extends Column {
                 () -> "Valor para reinvestir " + formato.format(totalParaReinvestirState.get()),
                 totalParaReinvestirState);
 
-        render((col, modf) -> {
+        render((modf) -> {
             modf.padding(15);
             modf.styles().bgColor(Color.web("#D1D0C3"));
 
@@ -124,7 +124,7 @@ public class HomeScreen extends Column {
             new Row_((mo) -> {
                 mo.fillMaxWidth(true).spaceBetween();
 
-                new Column((md) -> {
+                new Column(() -> {
                     new Text_("Resultado da simulação", m -> m.fontSize(20));
                     new Spacer(m -> m.height(10));
                     new Text_("Ao vender na Shopee:");
